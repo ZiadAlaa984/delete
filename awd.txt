@@ -1,0 +1,46 @@
+function displayData(index) {
+  let textHtml = `
+    <tr class="flex justify-between p-3 border-b-2 rounded-md items-center">
+      <td>
+        <div class="flex gap-1 new_data justify-center items-center">
+          <span class="flex  justify-center items-center"><input type="checkbox" class="checkbox checkbox-xs" /> </span>
+          <h4 class="pb-1">${datas[index].words}</h4>
+        </div>
+      </td>
+      <td>
+        <div>
+          <span onclick="updateData(${index})" class="transition-all text-2xl duration-300 hover:text-yellow-500 hover:opacity-100 opacity-40"><i _ngcontent-ng-c2008031352="" class=" fa-solid fa-pen-to-square cursor-pointer ms-1 "></i></span>
+          <span  onclick="deleteData(${index})" class="transition-all text-2xl duration-300 hover:text-red-500 hover:opacity-100 opacity-40"><i _ngcontent-ng-c2008031352="" class="fa-solid fa-trash-alt cursor-pointer ms-1 "></i></span>
+        </div>
+      </td>
+    </tr>
+  `;
+  tbody_container.innerHTML += textHtml;
+  item.innerHTML = datas.length;
+
+  // Add event listener to the checkbox
+  let checkbox = tbody_container.querySelector(".checkbox:last-child");
+  checkbox.checked = datas[index].checked || false; // Set initial checked state
+  checkbox.addEventListener("change", function () {
+    datas[index].checked = this.checked;
+    localStorage.setItem("data", JSON.stringify(datas)); // Update local storage
+    let h4 = this.closest(".new_data").querySelector("h4");
+    if (this.checked) {
+      h4.classList.add("line-through");
+    } else {
+      h4.classList.remove("line-through");
+    }
+  });
+}
+
+function displayDataAll() {
+  tbody_container.innerHTML = "";
+  for (let i = 0; i < datas.length; i++) {
+    displayData(i);
+  }
+}
+
+// Load the saved data on page load
+window.addEventListener("load", function () {
+  displayDataAll();
+});
